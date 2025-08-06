@@ -51,18 +51,6 @@ const products = [
     link: '#',
     thumbnail: '/orderForm.png',
   },
-
-
-  // {
-  //   title: 'Customer Insights',
-  //   link: '#',
-  //   thumbnail: '/customers.png',
-  // },
-  // {
-  //   title: 'Analytics Overview',
-  //   link: '#',
-  //   thumbnail: '/analytics.png',
-  // },
 ]
 
 const Landing = () => {

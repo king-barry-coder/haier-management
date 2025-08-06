@@ -2,8 +2,8 @@
 
 import { useRef } from "react";
 import {
-  combineReducers,
   configureStore,
+  combineReducers,
   type Store,
 } from "@reduxjs/toolkit";
 import {
@@ -12,11 +12,7 @@ import {
   useSelector,
   Provider,
 } from "react-redux";
-import globalReducer from "@/app/state";
-import cartReducer from "@/app/cart/cartSlice"; // ✅ Import your cart slice
-import { api } from "@/app/state/api";
-import { setupListeners } from "@reduxjs/toolkit/query";
-
+import { setupListeners } from "@reduxjs/toolkit/query/react";
 import {
   persistStore,
   persistReducer,
@@ -30,43 +26,42 @@ import {
 import { PersistGate } from "redux-persist/integration/react";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
-// 🧠 Setup fallback for server
+import globalReducer from "@/app/state";
+import cartReducer from "@/app/cart/cartSlice";
+import { api } from "@/app/state/api";
+
+// Fallback for server-side rendering
 const createNoopStorage = () => ({
-  getItem() {
-    return Promise.resolve(null);
-  },
-  setItem(_key: any, value: any) {
-    return Promise.resolve(value);
-  },
-  removeItem() {
-    return Promise.resolve();
-  },
+  getItem: async (): Promise<string | null> => null,
+  setItem: async (_: string, value: string): Promise<string> => value,
+  removeItem: async (): Promise<void> => {},
 });
 
-const storage = typeof window === "undefined"
-  ? createNoopStorage()
-  : createWebStorage("local");
+const storage =
+  typeof window === "undefined"
+    ? createNoopStorage()
+    : createWebStorage("local");
 
-// 🧠 Persist only global and cart slices (if needed)
+// Redux persist config
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["global", "cart"], // ✅ Make sure 'cart' is listed
+  whitelist: ["global", "cart"],
 };
 
-// 🧠 Combine reducers
+// Combine reducers
 const rootReducer = combineReducers({
   global: globalReducer,
-  cart: cartReducer, // ✅ Register cart slice
+  cart: cartReducer,
   [api.reducerPath]: api.reducer,
 });
 
-// 🧠 Wrap in persistence
+// Persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// 🧠 Make store
-export const makeStore = () => {
-  return configureStore({
+// Create store
+export const makeStore = () =>
+  configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -75,16 +70,16 @@ export const makeStore = () => {
         },
       }).concat(api.middleware),
   });
-};
 
-// 🧠 Types
+// Types
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
+
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-// 🧠 Store Provider
+// StoreProvider component
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
   const storeRef = useRef<Store | null>(null);
 
@@ -102,14 +97,19 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
       </PersistGate>
     </Provider>
   );
-};
+}
 
 
 
 
+// "use client";
 
 // import { useRef } from "react";
-// import { combineReducers, configureStore } from "@reduxjs/toolkit";
+// import {
+//   combineReducers,
+//   configureStore,
+//   type Store,
+// } from "@reduxjs/toolkit";
 // import {
 //   TypedUseSelectorHook,
 //   useDispatch,
@@ -117,6 +117,7 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
 //   Provider,
 // } from "react-redux";
 // import globalReducer from "@/app/state";
+// import cartReducer from "@/app/cart/cartSlice"; // ✅ Import your cart slice
 // import { api } from "@/app/state/api";
 // import { setupListeners } from "@reduxjs/toolkit/query";
 
@@ -133,38 +134,41 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
 // import { PersistGate } from "redux-persist/integration/react";
 // import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
-// /* REDUX PERSISTENCE */
-// const createNoopStorage = () => {
-//   return {
-//     getItem(_key: any) {
-//       return Promise.resolve(null);
-//     },
-//     setItem(_key: any, value: any) {
-//       return Promise.resolve(value);
-//     },
-//     removeItem(_key: any) {
-//       return Promise.resolve();
-//     },
-//   };
-// };
+// // 🧠 Setup fallback for server
+// const createNoopStorage = () => ({
+//   getItem() {
+//     return Promise.resolve(null);
+//   },
+//   setItem(_key: any, value: any) {
+//     return Promise.resolve(value);
+//   },
+//   removeItem() {
+//     return Promise.resolve();
+//   },
+// });
 
-// const storage =
-//   typeof window === "undefined"
-//     ? createNoopStorage()
-//     : createWebStorage("local");
+// const storage = typeof window === "undefined"
+//   ? createNoopStorage()
+//   : createWebStorage("local");
 
+// // 🧠 Persist only global and cart slices (if needed)
 // const persistConfig = {
 //   key: "root",
 //   storage,
-//   whitelist: ["global"],
+//   whitelist: ["global", "cart"], // ✅ Make sure 'cart' is listed
 // };
+
+// // 🧠 Combine reducers
 // const rootReducer = combineReducers({
 //   global: globalReducer,
+//   cart: cartReducer, // ✅ Register cart slice
 //   [api.reducerPath]: api.reducer,
 // });
+
+// // 🧠 Wrap in persistence
 // const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// /* REDUX STORE */
+// // 🧠 Make store
 // export const makeStore = () => {
 //   return configureStore({
 //     reducer: persistedReducer,
@@ -177,24 +181,22 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
 //   });
 // };
 
-// /* REDUX TYPES */
+// // 🧠 Types
 // export type AppStore = ReturnType<typeof makeStore>;
 // export type RootState = ReturnType<AppStore["getState"]>;
 // export type AppDispatch = AppStore["dispatch"];
 // export const useAppDispatch = () => useDispatch<AppDispatch>();
 // export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-// /* PROVIDER */
-// export default function StoreProvider({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   const storeRef = useRef<AppStore>();
+// // 🧠 Store Provider
+// export default function StoreProvider({ children }: { children: React.ReactNode }) {
+//   const storeRef = useRef<Store | null>(null);
+
 //   if (!storeRef.current) {
 //     storeRef.current = makeStore();
 //     setupListeners(storeRef.current.dispatch);
 //   }
+
 //   const persistor = persistStore(storeRef.current);
 
 //   return (
@@ -204,4 +206,9 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
 //       </PersistGate>
 //     </Provider>
 //   );
-// }
+// };
+
+
+
+
+

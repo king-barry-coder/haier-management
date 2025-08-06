@@ -1,11 +1,9 @@
 
 import React from 'react'
-import { ArrowLeftRight, ArrowRightLeft,  CalendarCheck, ChevronDown, ChevronUp,  Home,  LayoutDashboard,  Logs,  LogsIcon,  PackageSearch,  Settings,  Table, Tv, Users,  } from "lucide-react"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupAction, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarSeparator } from './ui/sidebar'
+import { ArrowLeftRight,   LayoutDashboard,  Logs,   PackageSearch } from "lucide-react"
+import { Sidebar, SidebarContent, SidebarGroup,  SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem,  SidebarSeparator } from './ui/sidebar'
 import Link from 'next/link'
 import Image from 'next/image'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible'
 // import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible'
 
 // Menu items.

@@ -80,7 +80,7 @@ const CardPurchaseSummary = () => {
                 />
                 <Tooltip
                   content={({ active, payload, label }) => {
-                    if (active && payload && payload.length) {
+                    if (active && payload && payload.length && label !== undefined) {
                       const date = new Date(label).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",

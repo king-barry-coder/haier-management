@@ -16,7 +16,7 @@ const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const salesRoutes_1 = __importDefault(require("./routes/salesRoutes"));
 const inventoryRoutes_1 = __importDefault(require("./routes/inventoryRoutes"));
 // import expenseRoutes from "./routes/expenseRoutes";
-/* CONFIGURATIONS */
+/* CONFIGURATION */
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -25,14 +25,15 @@ app.use(helmet_1.default.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use((0, morgan_1.default)("common"));
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
-app.use((0, cors_1.default)());
+// ✅ Enable CORS for all origins
+app.use((0, cors_1.default)({ origin: "*" }));
 /* ROUTES */
 app.use("/dashboard", dashboardRoutes_1.default);
 app.use("/products", productRoutes_1.default);
 app.use("/users", userRoutes_1.default);
 app.use("/api", salesRoutes_1.default);
 app.use("/", inventoryRoutes_1.default);
-// app.use("/expenses", expenseRoutes); 
+// app.use("/expenses", expenseRoutes);
 app.get("/get", (req, res) => {
     res.send("Hello world");
 });

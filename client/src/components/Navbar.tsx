@@ -1,11 +1,10 @@
 "use client"
 
-import { Bell, Moon, Sun } from "lucide-react"
+import { Moon, Sun } from "lucide-react"
 import { Button } from "./ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { SidebarTrigger } from "./ui/sidebar"
 import { useTheme } from "next-themes"
-import Link from "next/link"
 import { Input } from "./ui/input"
 
 
@@ -54,19 +53,6 @@ const Navbar = () => {
                     </DropdownMenuItem>
                 </DropdownMenuContent>
                 </DropdownMenu>
-
-                {/* Auth Buttons
-                <Link href='/login'>
-                    <Button variant='secondary' size='sm'> 
-                            Login
-                    </Button>
-                </Link>
-
-                 <Link href='/signup'>
-                    <Button variant='secondary' size='sm'> 
-                            sign Up
-                    </Button>
-                </Link> */}
             </div>
         </nav>
     </div>

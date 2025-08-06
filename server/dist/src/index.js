@@ -33,6 +33,9 @@ app.use("/users", userRoutes_1.default);
 app.use("/api", salesRoutes_1.default);
 app.use("/", inventoryRoutes_1.default);
 // app.use("/expenses", expenseRoutes); 
+app.get("/get", (req, res) => {
+    res.send("Hello world");
+});
 /* SERVER */
 const port = Number(process.env.PORT) || 3001;
 app.listen(port, "0.0.0.0", () => {

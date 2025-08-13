@@ -126,7 +126,7 @@ export const Header = () => {
             </Button>
           </Link>
 
-          <Link href="/signup">
+          <Link href="/signUp">
             <Button size="sm" className="bg-blue-500 text-white hover:bg-white hover:text-black transition-colors">
               Sign Up as Trader
             </Button>

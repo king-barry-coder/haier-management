@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -9,9 +8,9 @@ datasource db {
 }
 
 model Users {
-  userId   String @id
-  name     String
-  email    String
+  userId String @id
+  name   String
+  email  String
 }
 
 model Products {
@@ -20,10 +19,9 @@ model Products {
   price         Float
   rating        Float?
   stockQuantity Int
-
-  Sales         Sales[]
   Purchases     Purchases[]
   saleItems     SaleItem[]
+  Sales         Sales[]
 }
 
 model Sales {
@@ -33,7 +31,6 @@ model Sales {
   quantity    Int
   unitPrice   Float
   totalAmount Float
-
   product     Products @relation(fields: [productId], references: [productId])
 }
 
@@ -44,7 +41,6 @@ model Purchases {
   quantity   Int
   unitCost   Float
   totalCost  Float
-
   product    Products @relation(fields: [productId], references: [productId])
 }
 
@@ -72,8 +68,7 @@ model PurchaseSummary {
 model ExpenseSummary {
   expenseSummaryId  String              @id
   totalExpenses     Float
-  date              DateTime @default(now())
-
+  date              DateTime            @default(now())
   ExpenseByCategory ExpenseByCategory[]
 }
 
@@ -82,20 +77,18 @@ model ExpenseByCategory {
   expenseSummaryId    String
   category            String
   amount              BigInt
-  date                DateTime @default(now())
-
+  date                DateTime       @default(now())
   expenseSummary      ExpenseSummary @relation(fields: [expenseSummaryId], references: [expenseSummaryId])
 }
 
 model Sale {
-  id           String      @id @default(uuid())
+  id           String     @id @default(uuid())
   customerName String
   address      String
   email        String
   phone        String
-  status       String      @default("pending")
-  createdAt    DateTime    @default(now())
-
+  status       String     @default("pending")
+  createdAt    DateTime   @default(now())
   items        SaleItem[]
 }
 
@@ -105,99 +98,6 @@ model SaleItem {
   productId String
   quantity  Int
   price     Float
-
-  sale      Sale     @relation(fields: [saleId], references: [id])
   product   Products @relation(fields: [productId], references: [productId])
+  sale      Sale     @relation(fields: [saleId], references: [id])
 }
-
-
-
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-// output   = "../generated/prisma"
-// generator client {
-//   provider = "prisma-client-js"
-  
-// }
-
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
-// model Users {
-//   userId String @id
-//   name   String
-//   email  String
-// }
-
-// model Products {
-//   productId     String      @id
-//   name          String
-//   price         Float
-//   rating        Float?
-//   stockQuantity Int
-//   Sales         Sales[]
-//   Purchases     Purchases[]
-// }
-
-// model Sales {
-//   saleId      String   @id
-//   productId   String
-//   timestamp   DateTime
-//   quantity    Int
-//   unitPrice   Float
-//   totalAmount Float
-//   product     Products @relation(fields: [productId], references: [productId])
-// }
-
-// model Purchases {
-//   purchaseId String   @id
-//   productId  String
-//   timestamp  DateTime
-//   quantity   Int
-//   unitCost   Float
-//   totalCost  Float
-//   product    Products @relation(fields: [productId], references: [productId])
-// }
-
-// model Expenses {
-//   expenseId String   @id
-//   category  String
-//   amount    Float
-//   timestamp DateTime
-// }
-
-// model SalesSummary {
-//   salesSummaryId   String   @id
-//   totalValue       Float
-//   changePercentage Float?
-//   date             DateTime
-// }
-
-// model PurchaseSummary {
-//   purchaseSummaryId String   @id
-//   totalPurchased    Float
-//   changePercentage  Float?
-//   date              DateTime
-// }
-
-// model ExpenseSummary {
-//   expenseSummaryId  String              @id
-//   totalExpenses     Float
-//   date              DateTime
-//   ExpenseByCategory ExpenseByCategory[]
-// }
-
-// model ExpenseByCategory {
-//   expenseByCategoryId String         @id
-//   expenseSummaryId    String
-//   category            String
-//   amount              BigInt
-//   date                DateTime
-//   expenseSummary      ExpenseSummary @relation(fields: [expenseSummaryId], references: [expenseSummaryId])
-// }
-

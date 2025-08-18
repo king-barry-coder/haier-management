@@ -4,6 +4,6 @@ import { getInventory } from "../controllers/inventoryControllers";
 
 const router = express.Router();
 
-router.get("/inventory", getInventory);
+router.get("/", getInventory);
 
 export default router;

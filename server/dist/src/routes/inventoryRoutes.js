@@ -7,5 +7,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const inventoryControllers_1 = require("../controllers/inventoryControllers");
 const router = express_1.default.Router();
-router.get("/inventory", inventoryControllers_1.getInventory);
+router.get("/", inventoryControllers_1.getInventory);
 exports.default = router;

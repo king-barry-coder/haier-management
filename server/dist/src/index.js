@@ -38,18 +38,18 @@ app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 // ✅ Enable CORS for all origins
 app.use((0, cors_1.default)({ origin: "*" }));
-/* ROUTES */
-app.use("/dashboard", dashboardRoutes_1.default);
-app.use("/products", productRoutes_1.default);
-app.use("/users", userRoutes_1.default);
-app.use("/api", salesRoutes_1.default);
-app.use("/", inventoryRoutes_1.default);
-// app.use("/expenses", expenseRoutes);
-app.get("/get", (req, res) => {
-    res.send("Hello world");
+/* ROUTES — all under /api */
+app.use("/api/dashboard", dashboardRoutes_1.default);
+app.use("/api/products", productRoutes_1.default);
+app.use("/api/users", userRoutes_1.default);
+app.use("/api/sales", salesRoutes_1.default);
+app.use("/api/inventory", inventoryRoutes_1.default);
+// app.use("/api/expenses", expenseRoutes);
+app.get("/api/health", (req, res) => {
+    res.send("✅ API is running");
 });
 // ✅ Database connection test route
-app.get("/db-test", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/db-test", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield prisma.$connect();
         res.status(200).send("✅ Database connection successful!");
@@ -70,9 +70,67 @@ app.get("/db-test", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 /* SERVER */
 const port = Number(process.env.PORT) || 3001;
 app.listen(port, "0.0.0.0", () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`🚀 Server running on port ${port}`);
 });
 exports.default = app;
+// import express, { Request, Response } from "express";
+// import dotenv from "dotenv";
+// import bodyParser from "body-parser";
+// import cors from "cors";
+// import helmet from "helmet";
+// import morgan from "morgan";
+// import { PrismaClient } from "@prisma/client";
+// /* ROUTE IMPORTS */
+// import dashboardRoutes from "./routes/dashboardRoutes";
+// import productRoutes from "./routes/productRoutes";
+// import userRoutes from "./routes/userRoutes";
+// import salesRoutes from "./routes/salesRoutes";
+// import inventoryRoutes from "./routes/inventoryRoutes";
+// // import expenseRoutes from "./routes/expenseRoutes";
+// /* CONFIGURATION */
+// dotenv.config();
+// const app = express();
+// const prisma = new PrismaClient();
+// app.use(express.json());
+// app.use(helmet());
+// app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+// app.use(morgan("common"));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// // ✅ Enable CORS for all origins
+// app.use(cors({ origin: "*" }));
+// /* ROUTES */
+// app.use("/dashboard", dashboardRoutes);
+// app.use("/products", productRoutes);
+// app.use("/users", userRoutes);
+// app.use("/api", salesRoutes);
+// app.use("/", inventoryRoutes);
+// // app.use("/expenses", expenseRoutes);
+// app.get("/get", (req: Request, res: Response) => {
+//   res.send("Hello world");
+// });
+// // ✅ Database connection test route
+// app.get("/db-test", async (req: Request, res: Response) => {
+//   try {
+//     await prisma.$connect();
+//     res.status(200).send("✅ Database connection successful!");
+//   } catch (error: unknown) {
+//     console.error("❌ Database connection failed:", error);
+//     if (error instanceof Error) {
+//       res.status(500).send("❌ Database connection failed: " + error.message);
+//     } else {
+//       res.status(500).send("❌ Database connection failed: Unknown error");
+//     }
+//   } finally {
+//     await prisma.$disconnect();
+//   }
+// });
+// /* SERVER */
+// const port = Number(process.env.PORT) || 3001;
+// app.listen(port, "0.0.0.0", () => {
+//   console.log(`Server running on port ${port}`);
+// });
+// export default app;
 // import express from "express";
 // import dotenv from "dotenv";
 // import bodyParser from "body-parser";

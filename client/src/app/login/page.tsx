@@ -16,63 +16,66 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { StatusPopup } from "../../components/statusPopup";
 
 const Login = () => {
   const router = useRouter();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [showLoader, setShowLoader] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
-
-  const validatePassword = (password: string) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
-    return regex.test(password);
-  };
+  const [loading, setLoading] = useState(false);
+  const [popup, setPopup] = useState({
+    show: false,
+    type: "success" as "success" | "error",
+    message: "",
+    subMessage: "",
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
-
-    if (id === "password") {
-      setIsPasswordValid(validatePassword(value));
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
-    setShowLoader(false);
+    setLoading(true);
 
     try {
       await axios.post(
         "https://authapi-jqve.onrender.com/api/Auth/login",
-        {
-          email: formData.email,
-          password: formData.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        formData,
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      setSuccess("Login successful!");
-      setShowLoader(true);
+      // Success Popup
+      setPopup({
+        show: true,
+        type: "success",
+        message: "Login Successful",
+        subMessage: "Welcome back",
+      });
 
       setTimeout(() => {
         router.push("/dashboard");
-      }, 2000);
+      }, 2500);
     } catch (err: unknown) {
+      setLoading(false);
+
+      // Error Popup
+      setPopup({
+        show: true,
+        type: "error",
+        message: "Login Failed",
+        subMessage: "Please try again later!",
+      });
+
+      // Hide popup after 3s
+      setTimeout(() => {
+        setPopup({ ...popup, show: false });
+      }, 3000);
+
       if (axios.isAxiosError(err)) {
-        console.error("Login failed:", err.response?.data);
         setError(err.response?.data?.message || "Login failed. Try again.");
       } else {
         setError("An unexpected error occurred.");
@@ -123,67 +126,65 @@ const Login = () => {
                   onChange={handleChange}
                   required
                 />
-                <p
-                  className={`text-sm ${
-                    isPasswordValid ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  Minimum 6 characters, uppercase, lowercase, number & special character
-                </p>
               </div>
             </div>
 
             {error && <p className="text-red-600 mt-4 text-sm">{error}</p>}
-            {success && <p className="text-green-600 mt-4 text-sm">{success}</p>}
 
-            <Button type="submit" className="w-full mt-4">
-              Login
+            <Button type="submit" className="w-full mt-4" disabled={loading}>
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                  </svg>
+                  Validating...
+                </div>
+              ) : (
+                "Login"
+              )}
             </Button>
-
-            {showLoader && (
-              <div className="mt-4 flex items-center justify-center gap-2 text-sm text-blue-600">
-                <svg
-                  className="animate-spin h-4 w-4 text-blue-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                  />
-                </svg>
-                Welcome back...
-              </div>
-            )}
           </form>
         </CardContent>
 
         <CardFooter className="flex-col gap-2">
           <div className="flex gap-2 text-sm">
             Not a trader?
-            <Link href="/signup" className="text-blue-500 underline">
+            <Link href="/signUp" className="text-blue-500 underline">
               Sign Up
             </Link>
           </div>
         </CardFooter>
       </Card>
+
+      {/* Popup */}
+      <StatusPopup
+        show={popup.show}
+        type={popup.type}
+        message={popup.message}
+        subMessage={popup.subMessage}
+      />
     </div>
   );
 };
 
 export default Login;
-
-
 
 // "use client";
 

@@ -30,10 +30,10 @@ const RegisterPage = () => {
   });
 
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [popup, setPopup] = useState<"success" | "error" | null>(null);
 
   const togglePassword = () => setShowPassword((prev) => !prev);
   const toggleConfirm = () => setShowConfirm((prev) => !prev);
@@ -51,7 +51,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
+    setPopup(null);
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
@@ -76,12 +76,13 @@ const RegisterPage = () => {
         confirmPaasword: formData.confirmPassword, // backend expects typo
       });
 
-      setSuccess("Account created successfully!");
+      setPopup("success");
       setTimeout(() => router.push("/login"), 2500);
     } catch (err: unknown) {
       const error = err as AxiosError<{ message: string }>;
       console.error("Registration error:", error.response?.data || error.message);
-      setError(error.response?.data?.message || "Account creation failed.");
+      setPopup("error");
+      setTimeout(() => setPopup(null), 3000);
     } finally {
       setLoading(false);
     }
@@ -101,6 +102,32 @@ const RegisterPage = () => {
           disableRotation={false}
         />
       </div>
+
+     {popup && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[9999]">
+    <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col items-center max-w-sm w-full">
+      {popup === "success" ? (
+        <>
+          <CheckCircle className="text-green-500 w-12 h-12 mb-2" />
+          <p className="text-green-600 dark:text-green-400 font-medium">
+            Account creation successful
+          </p>
+          <div className="mt-2 flex items-center gap-2">
+            <Loader2 className="animate-spin h-4 w-4 text-green-500" />
+            <span className="text-green-500 text-sm">Redirecting...</span>
+          </div>
+        </>
+      ) : (
+        <>
+          <XCircle className="text-red-500 w-12 h-12 mb-2" />
+          <p className="text-red-600 dark:text-red-400 font-medium">
+            Account creation failed. Please try again.
+          </p>
+        </>
+      )}
+    </div>
+  </div>
+)}
 
       <Card className="w-full max-w-sm z-10">
         <CardHeader>
@@ -199,20 +226,6 @@ const RegisterPage = () => {
               </button>
             </div>
 
-            {error && (
-              <div className="flex items-center gap-2 text-red-600 text-sm">
-                <XCircle className="w-4 h-4" />
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="flex items-center gap-2 text-green-600 text-sm">
-                <CheckCircle className="w-4 h-4" />
-                {success}
-              </div>
-            )}
-
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -229,10 +242,8 @@ const RegisterPage = () => {
         <CardFooter className="flex-col gap-2">
           <CardContent className="flex gap-1 items-center justify-center">
             Already a trader?
-            <Link href="/login">
-              <Button variant="link" size="icon">
+            <Link href="/login" className=" text-blue-500 underline">
                 Login
-              </Button>
             </Link>
           </CardContent>
         </CardFooter>

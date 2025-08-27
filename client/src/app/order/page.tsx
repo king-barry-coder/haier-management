@@ -37,8 +37,11 @@ export default function ProductsPage() {
 
   return (
     <div className="w-screen">
-      <NavbarNew />
-      <div className="flex p-6">
+      <div className=" fixed w-full z-10">
+      <NavbarNew/>
+      </div>
+
+      <div className="flex p-6 mt-[90px]">
         {/* LEFT: Products */}
         <div className="flex-1">
           <h1 className="text-2xl font-bold mb-4">All Products</h1>

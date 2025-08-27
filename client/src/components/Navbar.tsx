@@ -7,54 +7,49 @@ import { SidebarTrigger } from "./ui/sidebar"
 import { useTheme } from "next-themes"
 import { Input } from "./ui/input"
 
-
 const Navbar = () => {
-    const {setTheme} = useTheme();
+  const { setTheme } = useTheme();
+
   return (
-    <div>
-        <nav className="flex items-center justify-between p-4">
-            {/* left side  */}
-            <SidebarTrigger/>
+    <div className="w-full border-b">
+      <nav className="flex items-center justify-between p-4 w-full gap-2">
+        {/* left side */}
+        <SidebarTrigger />
 
-           
-           {/* middle */}
-           <div className=" relative">
-             <Input type="Search" placeholder="Search groups and products" className=" w-90 h-7 rounded-sm" />
+        {/* middle (search input) */}
+        <div className="flex-1 max-w-md w-full">
+          <Input
+            type="search"
+            placeholder="Search groups and products"
+            className="w-full h-8 rounded-sm"
+          />
+        </div>
 
-             {/* <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-non">
-                <Bell className="text-gray-500" size={20}/>
-             </div> */}
-
-           </div>
-
-
-
-            {/* right side */}
-
-            <div className=" flex gap-2"> 
-             {/* theme */}
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
-                    <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                    <span className="sr-only">Toggle theme</span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-        </nav>
+        {/* right side */}
+        <div className="flex gap-2">
+          {/* theme toggle */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setTheme("light")}>
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                System
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </nav>
     </div>
   )
 }

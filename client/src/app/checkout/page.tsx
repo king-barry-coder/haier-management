@@ -41,7 +41,9 @@ export default function CheckoutForm() {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/api/sales", {
+
+      // http://localhost:8000/api/sales localhost connection
+      const res = await fetch("https://haier-management.onrender.com/api/sales", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
